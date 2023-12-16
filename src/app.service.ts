@@ -6,6 +6,25 @@ import { PrismaService } from 'src/infra/database/prisma/prisma.service';
 export class AppService {
   constructor(private readonly prismaService: PrismaService) {}
 
+  async connectPlayer() {
+    const game = await this.prismaService.game.findUnique({
+      where: {
+        id: GAME_SESSION_ID,
+      },
+      include: {
+        blueprintsInGame: {
+          include: {
+            blueprint: true,
+          },
+        },
+      },
+    });
+
+    return {
+      game,
+    };
+  }
+
   async resetGame() {
     const updatedGame = await this.prismaService.game.update({
       where: {
@@ -17,6 +36,13 @@ export class AppService {
           deleteMany: {},
         },
         createdAt: new Date(),
+      },
+      include: {
+        blueprintsInGame: {
+          include: {
+            blueprint: true,
+          },
+        },
       },
     });
 
@@ -41,8 +67,11 @@ export class AppService {
       },
     });
 
-    const blueprintsInGame =
-      await this.prismaService.blueprintInGame.findMany();
+    const blueprintsInGame = await this.prismaService.blueprintInGame.findMany({
+      include: {
+        blueprint: true,
+      },
+    });
 
     const blueprintPromise = blueprintsInGame.map(async (blueprintInGame) => {
       const isExpired = blueprintInGame.expirationDay <= updatedGame.day;
@@ -62,7 +91,11 @@ export class AppService {
     await Promise.allSettled(blueprintPromise);
 
     const updatedBlueprintsInGame =
-      await this.prismaService.blueprintInGame.findMany();
+      await this.prismaService.blueprintInGame.findMany({
+        include: {
+          blueprint: true,
+        },
+      });
 
     return {
       updatedGame,
@@ -103,7 +136,33 @@ export class AppService {
     });
 
     const updatedBlueprintsInGame =
-      await this.prismaService.blueprintInGame.findMany();
+      await this.prismaService.blueprintInGame.findMany({
+        include: {
+          blueprint: true,
+        },
+      });
+
+    return {
+      updatedBlueprintsInGame,
+    };
+  }
+
+  async deleteBlueprint(blueprintId: string) {
+    await this.prismaService.blueprintInGame.delete({
+      where: {
+        gameId_blueprintId: {
+          blueprintId: Number(blueprintId),
+          gameId: GAME_SESSION_ID,
+        },
+      },
+    });
+
+    const updatedBlueprintsInGame =
+      await this.prismaService.blueprintInGame.findMany({
+        include: {
+          blueprint: true,
+        },
+      });
 
     return {
       updatedBlueprintsInGame,
