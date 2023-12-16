@@ -1,0 +1,51 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Game {
+  id               Int               @id @default(autoincrement())
+  day              Int
+  gameMaster       GameMaster        @relation(fields: [gameMasterId], references: [id])
+  gameMasterId     Int
+  blueprintsInGame BlueprintInGame[]
+  createdAt        DateTime          @default(now())
+}
+
+model GameMaster {
+  id       Int    @id @default(autoincrement())
+  password String
+
+  games    Game[]
+}
+
+model BlueprintInGame {
+  game          Game      @relation(fields: [gameId], references: [id])
+  gameId        Int
+  blueprint     Blueprint @relation(fields: [blueprintId], references: [id])
+  blueprintId   Int
+  
+  expirationDay Int
+  createdAt     DateTime  @default(now())
+
+  @@id([gameId, blueprintId])
+}
+
+model Blueprint {
+  id           Int               @id @default(autoincrement())
+  name         String
+  description  String
+  tips         String
+  category     String
+  ingredients  String
+  imageUrl     String
+  reward       Int
+  deliveryTime Int
+  createdAt    DateTime          @default(now())
+  
+  games        BlueprintInGame[]
+}
