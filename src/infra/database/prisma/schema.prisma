@@ -20,32 +20,33 @@ model GameMaster {
   id       Int    @id @default(autoincrement())
   password String
 
-  games    Game[]
+  games Game[]
 }
 
 model BlueprintInGame {
-  game          Game      @relation(fields: [gameId], references: [id])
-  gameId        Int
-  blueprint     Blueprint @relation(fields: [blueprintId], references: [id])
-  blueprintId   Int
-  
+  game        Game      @relation(fields: [gameId], references: [id])
+  gameId      Int
+  blueprint   Blueprint @relation(fields: [blueprintId], references: [id])
+  blueprintId Int
+
   expirationDay Int
-  createdAt     DateTime  @default(now())
+  createdAt     DateTime @default(now())
 
   @@id([gameId, blueprintId])
 }
 
 model Blueprint {
-  id           Int               @id @default(autoincrement())
-  name         String
-  description  String
-  tips         String
-  category     String
-  ingredients  String
-  imageUrl     String
-  reward       Int
-  deliveryTime Int
-  createdAt    DateTime          @default(now())
-  
-  games        BlueprintInGame[]
+  id              Int      @id @default(autoincrement())
+  name            String
+  description     String?
+  tips            String?
+  category        String
+  ingredients     String
+  ingredientCount Int
+  imageUrl        String?
+  reward          Int
+  deliveryTime    Int
+  createdAt       DateTime @default(now())
+
+  games BlueprintInGame[]
 }

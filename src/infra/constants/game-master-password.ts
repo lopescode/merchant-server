@@ -1,1 +1,1 @@
-export const GAME_MASTER_PASSWORD = 'youshallnotpass';
+export const GAME_MASTER_PASSWORD = 'y55';
