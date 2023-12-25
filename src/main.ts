@@ -15,8 +15,9 @@ async function bootstrap() {
     ),
   };
 
-  const app = await NestFactory.create(AppModule, { httpsOptions });
+  console.log({ httpsOptions });
 
+  const app = await NestFactory.create(AppModule, { httpsOptions });
   app.useGlobalFilters(new AllExceptionFilter(new LoggerService()));
   app.enableCors({
     origin: '*',
