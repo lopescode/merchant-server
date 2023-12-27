@@ -53,4 +53,11 @@ export class AppGateway {
 
     this.server.emit('blueprintsInGameUpdated', updatedBlueprintsInGame);
   }
+
+  @SubscribeMessage('getCurrentBlueprints')
+  async getCurrentBlueprints() {
+    const blueprints = await this.appService.getCurrentBlueprints();
+
+    this.server.emit('sendingCurrentBlueprints', blueprints);
+  }
 }

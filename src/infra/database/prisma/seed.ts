@@ -52,8 +52,8 @@ async function main() {
         createdAt: new Date(),
       },
       {
-        name: 'Escultura Ornamentada Esmeralda',
-        ingredients: 'Pedra, Pedra, Esmeralda, Manufatura, Artesanato',
+        name: 'Escultura Ornamentada de Quartzo',
+        ingredients: 'Pedra, Pedra, Quartzo, Manufatura, Artesanato',
         ingredientCount: 5,
 
         reward: 6,

@@ -168,4 +168,12 @@ export class AppService {
       updatedBlueprintsInGame,
     };
   }
+
+  async getCurrentBlueprints() {
+    return await this.prismaService.blueprintInGame.findMany({
+      where: {
+        gameId: GAME_SESSION_ID,
+      },
+    });
+  }
 }
