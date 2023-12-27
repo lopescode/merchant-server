@@ -174,6 +174,9 @@ export class AppService {
       where: {
         gameId: GAME_SESSION_ID,
       },
+      include: {
+        blueprint: true,
+      },
     });
   }
 }
