@@ -138,6 +138,7 @@ export class AppService {
         if (newIndex && !usedIndexes.includes(newIndex)) {
           index = newIndex;
         }
+        console.log({ newIndex });
       }
       return index;
     };
