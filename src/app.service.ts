@@ -114,7 +114,7 @@ export class AppService {
     });
 
     const usedIndexes = game.blueprintsInGame.map((bp) => bp.indexInGame);
-    const availableIndexes = [0, 1, 2, 3, 4, 5, 6, 7];
+    const availableIndexes = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
     const blueprints = await this.prismaService.blueprint.findMany();
 
@@ -131,8 +131,9 @@ export class AppService {
       ];
 
     const getRandomAvailableIndex = () => {
+      const tryCount = 0;
       let index = 999;
-      while (index === 999) {
+      while (index === 999 || tryCount < 25) {
         const newIndex =
           availableIndexes[Math.floor(Math.random() * availableIndexes.length)];
         if (newIndex && !usedIndexes.includes(newIndex)) {
@@ -143,12 +144,15 @@ export class AppService {
       return index;
     };
 
+    const indexInGame = getRandomAvailableIndex();
+    if (indexInGame === 999) return {};
+
     await this.prismaService.blueprintInGame.create({
       data: {
         gameId: game.id,
         blueprintId: randomBlueprint.id,
         expirationDay: game.day + randomBlueprint.deliveryTime,
-        indexInGame: getRandomAvailableIndex(),
+        indexInGame,
       },
     });
 
