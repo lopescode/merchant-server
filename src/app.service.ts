@@ -113,6 +113,9 @@ export class AppService {
       },
     });
 
+    const usedIndexes = game.blueprintsInGame.map((bp) => bp.indexInGame);
+    const availableIndexes = [0, 1, 2, 3, 4, 5, 6, 7];
+
     const blueprints = await this.prismaService.blueprint.findMany();
 
     const availableBlueprints = blueprints.filter(
@@ -127,11 +130,24 @@ export class AppService {
         Math.floor(Math.random() * availableBlueprints.length)
       ];
 
+    const getRandomAvailableIndex = () => {
+      let index = 999;
+      while (index === 999) {
+        const newIndex =
+          availableIndexes[Math.floor(Math.random() * availableIndexes.length)];
+        if (newIndex && !usedIndexes.includes(newIndex)) {
+          index = newIndex;
+        }
+      }
+      return index;
+    };
+
     await this.prismaService.blueprintInGame.create({
       data: {
         gameId: game.id,
         blueprintId: randomBlueprint.id,
         expirationDay: game.day + randomBlueprint.deliveryTime,
+        indexInGame: getRandomAvailableIndex(),
       },
     });
 

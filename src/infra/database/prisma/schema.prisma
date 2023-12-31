@@ -28,6 +28,7 @@ model BlueprintInGame {
   gameId      Int
   blueprint   Blueprint @relation(fields: [blueprintId], references: [id])
   blueprintId Int
+  indexInGame Int
 
   expirationDay Int
   createdAt     DateTime @default(now())
