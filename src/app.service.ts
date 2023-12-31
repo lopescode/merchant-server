@@ -131,7 +131,7 @@ export class AppService {
       ];
 
     const getRandomAvailableIndex = () => {
-      const tryCount = 0;
+      let tryCount = 0;
       let index = 999;
       while (index === 999 || tryCount < 25) {
         const newIndex =
@@ -140,6 +140,7 @@ export class AppService {
           index = newIndex;
         }
         console.log({ newIndex });
+        tryCount++;
       }
       return index;
     };
